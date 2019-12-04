@@ -43,6 +43,20 @@ describe('VoteServiceService', () => {
     expect(service.getItems()).toEqual([]);
   });
 
+  it('remove item with undo', () => {
+    const service: VoteService = TestBed.get(VoteService);
+    service.addItem("Alpha");
+    expect(service.getItems()).toEqual([
+      { name: "Alpha", votes: 0 }
+    ]);
+    service.removeItem("Alpha")
+    expect(service.getItems()).toEqual([]);
+    service.undo();
+    expect(service.getItems()).toEqual([
+      { name: "Alpha", votes: 0 }
+    ]);
+  });
+
   it('increase vote count', () => {
     const service: VoteService = TestBed.get(VoteService);
     service.addItem("Alpha");
@@ -52,6 +66,22 @@ describe('VoteServiceService', () => {
     service.upvote("Alpha");
     expect(service.getItems()).toEqual([
       { name: "Alpha", votes: 1 }
+    ]);
+  });
+
+  it('increase vote count with undo', () => {
+    const service: VoteService = TestBed.get(VoteService);
+    service.addItem("Alpha");
+    expect(service.getItems()).toEqual([
+      { name: "Alpha", votes: 0 }
+    ]);
+    service.upvote("Alpha");
+    expect(service.getItems()).toEqual([
+      { name: "Alpha", votes: 1 }
+    ]);
+    service.undo();
+    expect(service.getItems()).toEqual([
+      { name: "Alpha", votes: 0 }
     ]);
   });
 
@@ -68,6 +98,26 @@ describe('VoteServiceService', () => {
     service.downvote("Alpha");
     expect(service.getItems()).toEqual([
       { name: "Alpha", votes: 0 }
+    ]);
+  });
+
+  it('decrease vote count with undo', () => {
+    const service: VoteService = TestBed.get(VoteService);
+    service.addItem("Alpha");
+    expect(service.getItems()).toEqual([
+      { name: "Alpha", votes: 0 }
+    ]);
+    service.upvote("Alpha");
+    expect(service.getItems()).toEqual([
+      { name: "Alpha", votes: 1 }
+    ]);
+    service.downvote("Alpha");
+    expect(service.getItems()).toEqual([
+      { name: "Alpha", votes: 0 }
+    ]);
+    service.undo();
+    expect(service.getItems()).toEqual([
+      { name: "Alpha", votes: 1 }
     ]);
   });
 
